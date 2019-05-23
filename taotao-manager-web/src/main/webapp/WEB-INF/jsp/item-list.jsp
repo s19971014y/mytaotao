@@ -1,30 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <table class="easyui-datagrid" id="itemList" title="商品列表" 
        data-options="singleSelect:false,collapsible:true,pagination:true,url:'/item/list',method:'get',pageSize:30,toolbar:toolbar">
-    <!--
-        请求:
-        url:/localhost:8081/item/list
-        method:get
-        pageSize:30
-        page=1
-        响应:
-        {total:”2”,rows:[{“id”:”1”,”name”:”张三”},{“id”:”2”,”name”:”李四”}]}
-
-        total:总记录条
-        rows:一个商品信息
-
-        class 返回商品类{
-
-         private   Integer total;
-         private  List<商品类> rows;
-        }
-
-        工具类:
-            会被其他项目反复使用的类
-    -->
     <thead>
         <tr>
-            <!--绑定数据的代码-->
         	<th data-options="field:'ck',checkbox:true"></th>
         	<th data-options="field:'id',width:60">商品ID</th>
             <th data-options="field:'title',width:200">商品标题</th>
