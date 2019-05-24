@@ -8,4 +8,9 @@
 	<select id="findItems" resultType="com.taotao.pojo.TbItem">
 		SELECT * FROM tbitem
 	</select>
+
+	<select id="insert" parameterType="com.taotao.pojo.TbItem">
+		INSERT INTO tbitem(id, title, sellPoint, price, num, barcode, image, cid, created, updated)
+		VALUES (#{id},#{title},#{sellPoint},#{price},#{num},#{barcode},#{image},#{cid},#{created},#{updated})
+	</select>
 </mapper>

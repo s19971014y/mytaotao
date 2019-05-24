@@ -19,4 +19,5 @@ public interface TbItemMapper {
 
 	List<TbItem> findItems();
 
+    void insert(TbItem tbItem);
 }
