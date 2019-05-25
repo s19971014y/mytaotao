@@ -83,7 +83,7 @@
 	<!-- 声明需要暴露的服务接口 -->
 <!--	&lt;!&ndash;商品接口&ndash;&gt;-->
 <!--	<dubbo:service interface="com.taotao.service.ItemService" ref="itemServiceImpl" />-->
-
+	<dubbo:service interface="com.taotao.content.service.ContentCategoryService" ref="contentCategoryServiceImpl" />
 
 	
 </beans>
