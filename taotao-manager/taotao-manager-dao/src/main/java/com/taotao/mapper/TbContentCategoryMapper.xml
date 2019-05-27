@@ -4,4 +4,17 @@
     <select id="findTbContentCategoryById" parameterType="long" resultType="com.taotao.pojo.TbContentCategory">
         SELECT * FROM tbcontentcategory WHERE parentId=#{parentId}
     </select>
+
+    <select id="findContentCategoryByParentId" parameterType="long" resultType="com.taotao.pojo.TbContentCategory">
+        SELECT * FROM tbcontentcategory WHERE id=#{id}
+    </select>
+
+    <insert id="insert" parameterType="com.taotao.pojo.TbContentCategory">
+        INSERT INTO tbcontentcategory(parentId, name, sortOrder,isParent, created, updated)
+        VALUES (#{parentId},#{name},#{sortOrder},#{isParent},#{created},#{updated})
+    </insert>
+
+    <update id="updateCategoryIsParent" parameterType="com.taotao.pojo.TbContentCategory">
+        UPDATE tbcontentcategory SET isParent=#{isParent} WHERE id=#{id}
+    </update>
 </mapper>
