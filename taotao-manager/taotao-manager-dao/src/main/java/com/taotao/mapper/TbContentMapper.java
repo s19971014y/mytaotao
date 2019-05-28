@@ -8,4 +8,7 @@ import java.util.List;
 public interface TbContentMapper {
 
     List<TbContent> findContentByCategoryId(Long categoryId);
+
+    void insertContent(TbContent tbContent);
+
 }
