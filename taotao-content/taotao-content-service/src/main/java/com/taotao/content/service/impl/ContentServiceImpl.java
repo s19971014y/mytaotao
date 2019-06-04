@@ -50,7 +50,7 @@ public class ContentServiceImpl implements ContentService {
          *
          */
 
-        String json = JedisClusterUtils.hget(CONTENT_KEY, categoryId + "");
+        String json = JedisUtils.hget(CONTENT_KEY, categoryId + "");
         if(StringUtils.isNotBlank(json)){
             List<TbContent> tbContents = JsonUtils.jsonToList(json, TbContent.class);
             System.out.println("从缓存中拿到了数据");
@@ -67,7 +67,7 @@ public class ContentServiceImpl implements ContentService {
          * value是一个map集合
          *             map集合的key为  分类id value为：内容集合json格式String字符串
          */
-        JedisClusterUtils.hset(CONTENT_KEY,categoryId+"", JsonUtils.objectToJson(result));
+        JedisUtils.hset(CONTENT_KEY,categoryId+"", JsonUtils.objectToJson(result));
 
 
         /**

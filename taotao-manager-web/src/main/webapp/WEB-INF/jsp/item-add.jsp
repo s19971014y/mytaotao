@@ -65,29 +65,29 @@
 </div>
 <script type="text/javascript">
 	var itemAddEditor ;
-	/**页面初始化完毕后执行此方法*/
+	//页面初始化完毕后执行此方法
 	$(function(){
-		/**创建富文本编辑器*/
+		//创建富文本编辑器
 		itemAddEditor = TAOTAO.createEditor("#itemAddForm [name=desc]");
-		/**初始化类目选择和图片上传器*/
+		//初始化类目选择和图片上传器
 		TAOTAO.init({fun:function(node){
-			/**根据商品的分类id取商品 的规格模板，生成规格信息。第四天内容。*/
-			/**TAOTAO.changeItemParam(node, "itemAddForm");*/
+			//根据商品的分类id取商品 的规格模板，生成规格信息。第四天内容。
+			//TAOTAO.changeItemParam(node, "itemAddForm");
 		}});
 	});
-	/**提交表单*/
+	//提交表单
 	function submitForm(){
-		/**有效性验证*/
+		//有效性验证
 		if(!$('#itemAddForm').form('validate')){
 			$.messager.alert('提示','表单还未填写完成!');
 			return ;
 		}
-		/**取商品价格，单位为“分”*/
+		//取商品价格，单位为“分”
 		$("#itemAddForm [name=price]").val(eval($("#itemAddForm [name=priceView]").val()) * 100);
-		/**同步文本框中的商品描述*/
+		//同步文本框中的商品描述
 		itemAddEditor.sync();
-		/**取商品的规格*/
-		/**
+		//取商品的规格
+		/*
 		var paramJson = [];
 		$("#itemAddForm .params li").each(function(i,e){
 			var trs = $(e).find("tr");
@@ -109,9 +109,8 @@
 		paramJson = JSON.stringify(paramJson);
 		$("#itemAddForm [name=itemParams]").val(paramJson);
 		*/
-
-		/**ajax的post方式提交表单*/
-		/**$("#itemAddForm").serialize()将表单序列号为key-value形式的字符串
+		//ajax的post方式提交表单
+		//$("#itemAddForm").serialize()将表单序列号为key-value形式的字符串
 		$.post("/item/save",$("#itemAddForm").serialize(), function(data){
 			if(data.status == 200){
 				$.messager.alert('提示','新增商品成功!');
@@ -122,6 +121,5 @@
 	function clearForm(){
 		$('#itemAddForm').form('reset');
 		itemAddEditor.html('');
-	}*/
 	}
 </script>

@@ -37,7 +37,7 @@
 		<property name="configLocation" value="classpath:SqlMapConfig.xml" />
 	</bean>
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.taotao.mapper" />
+		<property name="basePackage" value="com.taotao.search.dao,com.taotao.mapper" />
 	</bean>
 	
 	
@@ -70,6 +70,11 @@
 		<aop:advisor advice-ref="txAdvice"
 			pointcut="execution(* com.taotao.search.service.*.*(..))" />
 	</aop:config>
+
+	<!--配置单机版solr-->
+	<bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+		<constructor-arg name="baseURL" value="http://47.101.212.18:8080/solr"></constructor-arg>
+	</bean>
 	
 	<!-- 使用dubbo发布服务 -->
 	<!-- 提供方应用信息，用于计算依赖关系 -->
@@ -80,8 +85,8 @@
 	<dubbo:protocol name="dubbo" port="20882" />
 	<!-- 声明需要暴露的服务接口 -->
 
-<!--	&lt;!&ndash;图片接口服务&ndash;&gt;-->
-<!--	<dubbo:service interface="com.taotao.service.PictureService" ref="pictureServiceImpl" />-->
+	<!--solr搜索服务-->
+	<dubbo:service interface="com.taotao.search.service.SearchItemService" ref="searchItemServiceImpl" timeout="600000"/>
+	<dubbo:service interface="com.taotao.search.service.SearchService" ref="searchServiceImpl" timeout="600000"/>
 
-	
 </beans>

@@ -82,11 +82,11 @@
 	<dubbo:protocol name="dubbo" port="20880" />
 	<!-- 声明需要暴露的服务接口 -->
 	<!--商品接口-->
-	<dubbo:service interface="com.taotao.service.ItemService" ref="itemServiceImpl" />
+	<dubbo:service interface="com.taotao.service.ItemService" ref="itemServiceImpl" timeout="60000"/>
 	<!--商品分类接口-->
-	<dubbo:service interface="com.taotao.service.ItemCatService" ref="itemCatServiceImpl" />
+	<dubbo:service interface="com.taotao.service.ItemCatService" ref="itemCatServiceImpl" timeout="60000"/>
 	<!--图片接口服务-->
-	<dubbo:service interface="com.taotao.service.PictureService" ref="pictureServiceImpl" />
+	<dubbo:service interface="com.taotao.service.PictureService" ref="pictureServiceImpl" timeout="60000"/>
 
 	
 </beans>

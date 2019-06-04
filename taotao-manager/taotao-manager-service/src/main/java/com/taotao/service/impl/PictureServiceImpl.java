@@ -49,10 +49,10 @@ public class PictureServiceImpl implements PictureService {
             result.setUrl(IMAGE_BASE_URL + "/" + filePath + "/" +newName);
             result.setMessage("上传成功");
         }catch (Exception ex){
-
             result.setError(1);
             result.setMessage("上传失败");
-        }
+           ex.printStackTrace();
+    }
         return result;
     }
 }
