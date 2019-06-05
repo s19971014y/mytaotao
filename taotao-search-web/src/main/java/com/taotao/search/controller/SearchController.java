@@ -20,8 +20,7 @@ public class SearchController {
     private SearchService searchService;
 
     @RequestMapping("/search")
-    @ResponseBody
-    public SearchResult search(@RequestParam String q, @RequestParam(defaultValue = "1") int page, Model model) throws Exception {
+    public String search(@RequestParam String q, @RequestParam(defaultValue = "1") int page, Model model) throws Exception {
         //这里的请求是get请求，不能解决post中文乱码问题
         byte[] bytes = q.getBytes("ISO-8859-1");
 
@@ -32,9 +31,9 @@ public class SearchController {
         //传递给页面
         model.addAttribute("query",queryString);
         model.addAttribute("totalPages",result.getPageCount());
-        model.addAttribute("itemmList",result.getItemList());
+        model.addAttribute("itemList",result.getItemList());
         model.addAttribute("page",page);
 
-        return result;
+        return "search";
     }
 }

@@ -11,7 +11,7 @@ import java.util.Set;
 public class JedisGetUtils {
     static{
         //单机版
-        jedisPool = new JedisPool("47.101.212.18",6379);
+        jedisPool = new JedisPool("47.101.212.18",7000);
         //集群版
         Set<HostAndPort> set = new HashSet<>();
         set.add(new HostAndPort("47.101.212.18",7001));
