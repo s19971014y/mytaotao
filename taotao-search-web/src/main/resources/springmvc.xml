@@ -20,6 +20,7 @@
 		<property name="suffix" value=".jsp" />
 	</bean>	
 
+	<bean id="globalExceptionReslover" class="com.taotao.search.exception.GlobalExceptionReslover"></bean>
 
 	<!-- 定义文件上传解析器 -->
 	<bean id="multipartResolver"

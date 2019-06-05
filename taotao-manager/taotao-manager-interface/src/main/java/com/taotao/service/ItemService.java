@@ -27,5 +27,5 @@ public interface ItemService {
 	 * @param desc   描述，在实现类中用商品描述对象的itemDesc属性装
 	 * @return TaotaoResult对象，里面有四个属性   MAPPER(jackson对象),status状态码，msg描述信息，data数据
 	 */
-	TaotaoResult addItem(TbItem tbItem,String desc);
+	TaotaoResult addItem(TbItem tbItem,String desc) throws Exception;
 }

@@ -8,17 +8,27 @@ import com.taotao.result.EasyUIResult;
 import com.taotao.result.TaotaoResult;
 import com.taotao.utils.IDUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
 import com.taotao.mapper.TbItemMapper;
 import com.taotao.pojo.TbItem;
 import com.taotao.service.ItemService;
 
+
+import javax.jms.*;
 import java.util.Date;
 import java.util.List;
 
 @Service
 public class ItemServiceImpl implements ItemService{
+
+	@Autowired
+	private JmsTemplate jmsTemplate;
+	@Autowired
+	private Destination topicDestination;
 
 	@Autowired
 	private TbItemMapper tbItemMapper;
@@ -47,10 +57,10 @@ public class ItemServiceImpl implements ItemService{
 	}
 
 	@Override
-	public TaotaoResult addItem(TbItem tbItem, String desc) {
+	public TaotaoResult addItem(TbItem tbItem, String desc) throws JMSException {
 
 		//生成的商品id
-		long id = IDUtils.genItemId();
+		final long id = IDUtils.genItemId();
 		//添加商品时间
 		Date time = new Date();
 		//设置id
@@ -72,6 +82,19 @@ public class ItemServiceImpl implements ItemService{
 		itemDesc.setItemDesc(desc);
 
 		tbItemDescMapper.insert(itemDesc);
+
+
+
+		jmsTemplate.send(topicDestination, new MessageCreator() {
+			@Override
+			public Message createMessage(Session session) throws JMSException {
+				TextMessage textMessage = session.createTextMessage();
+				textMessage.setText(id+"");
+				return textMessage;
+			}
+		});
+
+
 
 		return TaotaoResult.ok();
 	}

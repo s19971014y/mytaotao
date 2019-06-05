@@ -1,5 +1,7 @@
 package test.com.taotao.search.service.impl; 
 
+import org.apache.activemq.ActiveMQConnectionFactory;
+import org.apache.activemq.command.ActiveMQTextMessage;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrServer;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -11,6 +13,9 @@ import org.apache.solr.common.SolrInputDocument;
 import org.junit.Test;
 
 
+import javax.jms.*;
+import javax.sound.midi.Soundbank;
+import javax.xml.soap.Text;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -24,65 +29,110 @@ import java.util.Map;
 */ 
 public class MyTestTest { 
 
+
     @Test
-    public void add() throws IOException, SolrServerException {
+    public void demo1() throws JMSException {
+        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://47.101.212.18:61616");
+        Connection connection = factory.createConnection();
+        connection.start();
 
-        //solr服务对象
-        SolrServer solrServer = new HttpSolrServer("http://47.101.212.18:8080/solr");
-
-        //solr文档对象
-        SolrInputDocument document = new SolrInputDocument();
-
-        //使用solr文档对象往里面添加域对象
-        document.addField("id","002");
-        document.addField("item_title","华为p30");
-        document.addField("item_sell_point","摄像头30w倍缩放");
-        document.addField("item_price","6999");
-
-
-        solrServer.add(document);
-        solrServer.commit();
-
-
-
+        //是否开启事务
+        //是否自动应答机制开启
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Queue queue = session.createQueue("queue test");
+        //通过一个点对点对象创建一个生产者对象
+        MessageProducer producer = session.createProducer(queue);
+        //Message消息对象  有五种写法
+        //字符串类型的消息对象
+        TextMessage message = new ActiveMQTextMessage();
+        message.setText("point to point");
+        producer.send(message);
+        producer.close();
+        session.close();
+        connection.close();
     }
 
     @Test
-    public void query2() throws SolrServerException {
-        SolrServer solrServer = new HttpSolrServer("http://47.101.212.18:8080/solr");
-        SolrQuery query = new SolrQuery();
+    public void demo2() throws Exception {
+        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://47.101.212.18:61616");
+        Connection connection = factory.createConnection();
+        connection.start();
 
-        query.setQuery("华为");
-        query.set("df","item_keywords");
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        Queue queue = session.createQueue("queue test");
 
-        query.setHighlight(true);
-        query.addHighlightField("item_title");
-
-        query.setHighlightSimplePost("<em>");
-        query.setHighlightSimplePost("</em>");
-
-        QueryResponse response = solrServer.query(query);
-
-        SolrDocumentList results = response.getResults();
-        for(SolrDocument document:results){
-            System.out.println("商品的id为"+document.get("id"));
-            Map<String, Map<String, List<String>>> highlighting = response.getHighlighting();
-
-            List<String> list = highlighting.get(document.get("id")).get("item_title");
-
-            String itemTitle = null;
-
-            if(list != null && list.size()>0){
-                itemTitle = list.get(0);
-            }else {
-                //如果集合为null
-                itemTitle = (String) document.get("item_title");
+        //消费者
+        MessageConsumer consumer = session.createConsumer(queue);
+        consumer.setMessageListener(new MessageListener() {
+            @Override
+            public void onMessage(Message message) {
+                if(message instanceof  TextMessage){
+                    TextMessage textMessage = (TextMessage) message;
+                    try {//只有当有消息的时候才会执行
+                        System.out.println("接收到了数据，数据如下：");
+                        System.out.println(textMessage.getText());
+                    } catch (JMSException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
+        });
 
-            System.out.println("商品的名称为:"+itemTitle);
+        System.out.println("等待接收数据");
+        System.in.read();
+        consumer.close();
+        session.close();
+        connection.close();
+    }@Test
+    public void demo3() throws Exception {
+        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://47.101.212.18:61616");
+        Connection connection = factory.createConnection();
+        connection.start();
 
-        }
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+       //发布者对象的名称
+        Topic topic = session.createTopic("test topic");
 
+        MessageProducer producer = session.createProducer(topic);
+
+        TextMessage message = new ActiveMQTextMessage();
+        message.setText("point to point");
+        producer.send(message);
+
+        producer.close();
+        session.close();
+        connection.close();
+    }@Test
+    public void demo4() throws Exception {
+        ConnectionFactory factory = new ActiveMQConnectionFactory("tcp://47.101.212.18:61616");
+        Connection connection = factory.createConnection();
+        connection.start();
+
+        Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+       //发布者对象的名称
+        Topic topic = session.createTopic("test topic");
+        MessageConsumer consumer = session.createConsumer(topic);
+        consumer.setMessageListener(new MessageListener() {
+            @Override
+            public void onMessage(Message message) {
+                if (message instanceof  TextMessage){
+                    TextMessage textMessage = (TextMessage) message;
+                    System.out.println("接收到了数据  数据如下：");
+
+                    try {
+                        System.out.println(textMessage.getText());
+                    } catch (JMSException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        System.out.println("等待接收数据");
+        System.in.read();
+
+        session.close();
+        connection.close();
     }
 
 } 
