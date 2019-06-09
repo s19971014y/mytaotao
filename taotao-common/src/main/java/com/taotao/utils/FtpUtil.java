@@ -7,8 +7,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Iterator;
+import java.util.Vector;
 
-import org.apache.commons.net.ftp.FTP;
+import com.jcraft.jsch.*;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
@@ -33,7 +35,63 @@ public class FtpUtil {
 	public static boolean uploadFile(String host, int port, String username, String password, String basePath,
 			String filePath, String filename, InputStream input) {
 		boolean result = false;
-		FTPClient ftp = new FTPClient();
+		JSch jSch = new JSch();
+		try {
+			Session ftpuser = jSch.getSession(username, host, port);
+			ftpuser.setConfig("StrictHostKeyChecking", "no");
+			ftpuser.setPassword(password);
+			ftpuser.connect();
+
+			Channel channel = ftpuser.openChannel("sftp");
+			channel.connect();
+			ChannelSftp sftp = (ChannelSftp) channel;
+
+			//切换到上传目录
+			try {
+				Vector lsList = null;
+				try {
+					lsList = sftp.ls(basePath + filePath);
+				}catch (Exception e){
+				}
+
+				if(lsList == null){
+					//如果目录不存在创建目录
+					String[] dirs = filePath.split("/");
+					String tempPath = basePath;
+					sftp.cd(basePath);
+					for (String dir:dirs){
+						if(dir.length() > 0){
+							try{
+								sftp.cd(dir);
+							}catch (SftpException e){
+								sftp.mkdir(dir);
+								sftp.cd(dir);
+							}
+						}
+					}
+				}
+
+				//上传文件
+				sftp.put(input,filename);
+				result = true;
+				try {
+					input.close();
+					sftp.disconnect();
+					channel.disconnect();
+					ftpuser.disconnect();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} catch (JSchException e) {
+			e.printStackTrace();
+		}
+
+		/*FTPClient ftp = new FTPClient();
 		try {
 			int reply;
 			ftp.connect(host, port);// 连接FTP服务器
@@ -79,7 +137,7 @@ public class FtpUtil {
 				} catch (IOException ioe) {
 				}
 			}
-		}
+		}*/
 		return result;
 	}
 	
@@ -135,13 +193,33 @@ public class FtpUtil {
 		return result;
 	}
 	
-	public static void main(String[] args) {
-		try {  
-	        FileInputStream in=new FileInputStream(new File("D:\\temp\\image\\gaigeming.jpg"));  
-	        boolean flag = uploadFile("192.168.25.133", 21, "ftpuser", "ftpuser", "/home/ftpuser/www/images","/2015/01/21", "gaigeming.jpg", in);  
-	        System.out.println(flag);  
-	    } catch (FileNotFoundException e) {  
-	        e.printStackTrace();  
-	    }  
+	public static void main(String[] args) throws JSchException, SftpException, FileNotFoundException {
+		JSch jSch = new JSch();
+		Session ftpuser = jSch.getSession("ftpuser", "47.101.212.18", 22);
+		ftpuser.setConfig("StrictHostKeyChecking", "no");
+		ftpuser.setPassword("ftpuser");
+		ftpuser.connect();
+		System.out.println("连接成功");
+		Channel channel = ftpuser.openChannel("sftp");
+		channel.connect();
+		ChannelSftp sftp = (ChannelSftp) channel;
+
+//		sftp.mkdir("ww");
+//		sftp.mkdir("ww/images");
+//		sftp.cd("ww/images");
+//
+//		File file = new File("C:\\Users\\Sun\\Desktop\\1.jpg");
+//
+//		InputStream in = new FileInputStream(file);
+//		sftp.put(in,"2000.jpg");
+		SftpATTRS stat = null;
+		try{
+			 stat = sftp.stat("ww/ww/ww");
+		}catch (Exception e){
+
+		}
+		if(stat == null){
+			System.out.println("文件不存在");
+		}
 	}
 }

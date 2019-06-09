@@ -40,4 +40,10 @@ public class SearchItemServiceImpl implements SearchItemService {
         solrServer.commit();
         return TaotaoResult.ok();
     }
+
+    @Override
+    public SearchItem findItemById(Long id) {
+        SearchItem searchItem = searchItemMapper.findItemById(id);
+        return searchItem;
+    }
 }

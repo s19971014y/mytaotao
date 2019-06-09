@@ -57,8 +57,7 @@ public class ItemServiceImpl implements ItemService{
 	}
 
 	@Override
-	public TaotaoResult addItem(TbItem tbItem, String desc) throws JMSException {
-
+	public TaotaoResult addItem(TbItem tbItem, String desc) throws Exception {
 		//生成的商品id
 		final long id = IDUtils.genItemId();
 		//添加商品时间
@@ -98,5 +97,6 @@ public class ItemServiceImpl implements ItemService{
 
 		return TaotaoResult.ok();
 	}
+
 
 }

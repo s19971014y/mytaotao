@@ -76,6 +76,37 @@
 	<bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
 		<constructor-arg name="baseURL" value="http://47.101.212.18:8080/solr"></constructor-arg>
 	</bean>
+
+	<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+		<property name="brokerURL" value="tcp://47.101.212.18:61616"></property>
+	</bean>
+	<bean id="connectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+		<property name="targetConnectionFactory" ref="targetConnectionFactory"></property>
+	</bean>
+
+
+	<bean id="queueDestination" class="org.apache.activemq.command.ActiveMQQueue">
+		<constructor-arg>
+			<!--点对点发送的名字叫做 spring-queue-->
+			<value>spring-queue</value>
+		</constructor-arg>
+	</bean>
+
+	<bean id="topicDestination" class="org.apache.activemq.command.ActiveMQTopic">
+		<!--订阅与发布的名字叫做-->
+		<constructor-arg value="item-change-topic"></constructor-arg>
+	</bean>
+
+	<!-- 订阅者 或者 点对点的消费者  他们不需要消费对象  只需要一个监听器对象来监听数据就够了-->
+	<!-- 接收消息 -->
+	<!-- 配置监听器 -->
+	<bean id="myMessageListener" class="com.taotao.search.listener.MyMessageListener" />
+	<!-- 消息监听容器 -->
+	<bean class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+		<property name="connectionFactory" ref="connectionFactory" />
+		<property name="destination" ref="topicDestination" />
+		<property name="messageListener" ref="myMessageListener" />
+	</bean>
 	
 	<!-- 使用dubbo发布服务 -->
 	<!-- 提供方应用信息，用于计算依赖关系 -->
