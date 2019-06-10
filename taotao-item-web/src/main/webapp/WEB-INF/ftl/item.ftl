@@ -4,8 +4,8 @@
 	<title>${item.title } - 淘淘</title>
 	<script>var jdpts = new Object(); jdpts._st = new Date().getTime();</script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<link rel="stylesheet" type="text/css" href="/css/taotao.css" media="all" />
-	<link rel="stylesheet" type="text/css" href="/css/pshow.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="css/taotao.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="css/pshow.css" media="all" />
 	<script type="text/javascript">
     	window.pageConfig = {
 			compatible: true,
@@ -247,10 +247,10 @@
 <!-- footer start -->
 <#include "commons/footer.ftl" />
 <!-- footer end -->
-<script type="text/javascript" src="/js/jquery-1.6.4.js"></script>
-<script type="text/javascript" src="/js/lib-v1.js"></script>
-<script type="text/javascript" src="/js/product.js"></script>
-<script type="text/javascript" src="/js/iplocation_server.js"></script>
+<script type="text/javascript" src="js/jquery-1.6.4.js"></script>
+<script type="text/javascript" src="js/lib-v1.js"></script>
+<script type="text/javascript" src="js/product.js"></script>
+<script type="text/javascript" src="js/iplocation_server.js"></script>
 <script type="text/javascript">
 	var itemControl = {
 			param:{
