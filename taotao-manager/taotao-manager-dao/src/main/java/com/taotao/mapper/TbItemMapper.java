@@ -1,6 +1,7 @@
 package com.taotao.mapper;
 
 import com.taotao.pojo.TbItem;
+import com.taotao.pojo.TbItemDesc;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public interface TbItemMapper {
 	 * @param itemId 商品id
 	 * @return 返回商品id的商品信息
 	 */
-	TbItem findItemById(Integer itemId);
+	TbItem findItemById(Long itemId);
 
 	/**
 	 * 查询所有商品信息
@@ -20,4 +21,6 @@ public interface TbItemMapper {
 	List<TbItem> findItems();
 
     void insert(TbItem tbItem);
+
+    TbItemDesc findTbItemDescByItemId(Long itemId);
 }

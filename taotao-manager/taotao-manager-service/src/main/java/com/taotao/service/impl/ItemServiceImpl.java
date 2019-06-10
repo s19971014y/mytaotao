@@ -7,8 +7,12 @@ import com.taotao.pojo.TbItemDesc;
 import com.taotao.result.EasyUIResult;
 import com.taotao.result.TaotaoResult;
 import com.taotao.utils.IDUtils;
+import com.taotao.utils.JedisUtils;
+import com.taotao.utils.JsonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
@@ -34,9 +38,32 @@ public class ItemServiceImpl implements ItemService{
 	private TbItemMapper tbItemMapper;
 	@Autowired
 	private TbItemDescMapper tbItemDescMapper;
+
+	@Value("${ITEM_INFO}")
+	private String ITEM_INFO;
+	@Value("${DESC}")
+	private String DESC;
+	@Value("${BASE}")
+	private String BASE;
+	@Value("${Expiry_TIME}")
+	private Integer Expiry_TIME;
+
 	@Override
-	public TbItem findItemById(Integer itemId) {
-		return tbItemMapper.findItemById(itemId);
+	public TbItem findItemById(Long itemId) {
+
+		String json = JedisUtils.get(ITEM_INFO + ":" + itemId + BASE);
+		if(StringUtils.isNotBlank(json)){
+			TbItem tbItem = JsonUtils.jsonToPojo(json, TbItem.class);
+			System.out.println("从缓存中获取基本信息");
+			JedisUtils.expire(ITEM_INFO+ ":" + itemId + BASE,Expiry_TIME);
+			return tbItem;
+		}
+		TbItem tbItem = tbItemMapper.findItemById(itemId);
+		System.out.println("从数据库中获取基本信息");
+		//把商品信息存入redis中
+		JedisUtils.set(ITEM_INFO + ":" + itemId + BASE, JsonUtils.objectToJson(tbItem));
+		JedisUtils.expire(ITEM_INFO+ ":" + itemId + BASE,Expiry_TIME);
+		return tbItem;
 	}
 
 	@Override
@@ -96,6 +123,23 @@ public class ItemServiceImpl implements ItemService{
 
 
 		return TaotaoResult.ok();
+	}
+
+	@Override
+	public TbItemDesc findItemDescByItemId(Long itemId) {
+
+		String json = JedisUtils.get(ITEM_INFO + ":" + itemId + DESC);
+		if(StringUtils.isNotBlank(json)){
+			TbItemDesc itemDesc = JsonUtils.jsonToPojo(json, TbItemDesc.class);
+			JedisUtils.expire(ITEM_INFO + ":" + itemId + DESC,Expiry_TIME);
+			return itemDesc;
+		}
+
+		TbItemDesc itemDesc = tbItemMapper.findTbItemDescByItemId(itemId);
+
+		JedisUtils.set(ITEM_INFO + ":" + itemId + DESC,JsonUtils.objectToJson(itemDesc));
+		JedisUtils.expire(ITEM_INFO + ":" + itemId + DESC,Expiry_TIME);
+		return itemDesc;
 	}
 
 

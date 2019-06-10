@@ -1,6 +1,7 @@
 package com.taotao.service;
 
 import com.taotao.pojo.TbItem;
+import com.taotao.pojo.TbItemDesc;
 import com.taotao.result.EasyUIResult;
 import com.taotao.result.TaotaoResult;
 
@@ -11,7 +12,7 @@ public interface ItemService {
 	 * @param itemId 商品ID
 	 * @return 指定商品id的商品信息
 	 */
-	TbItem findItemById(Integer itemId);
+	TbItem findItemById(Long itemId);
 
 	/**
 	 * 分页显示商品信息
@@ -28,4 +29,11 @@ public interface ItemService {
 	 * @return TaotaoResult对象，里面有四个属性   MAPPER(jackson对象),status状态码，msg描述信息，data数据
 	 */
 	TaotaoResult addItem(TbItem tbItem,String desc) throws Exception;
+
+	/**
+	 * 根据商品id 查询商品描述信息
+	 * @param itemId
+	 * @return
+	 */
+	TbItemDesc findItemDescByItemId(Long itemId);
 }

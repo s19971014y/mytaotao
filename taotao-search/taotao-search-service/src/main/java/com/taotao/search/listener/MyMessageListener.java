@@ -40,6 +40,7 @@ public class MyMessageListener implements MessageListener {
                 document.addField("item_category_name", item.getCategoryName());
                 document.addField("item_desc", item.getItemDesc());
                 solrServer.add(document);
+                solrServer.commit();
             } catch (JMSException e) {
                 e.printStackTrace();
             } catch (SolrServerException e) {

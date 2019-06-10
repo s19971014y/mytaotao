@@ -1,9 +1,6 @@
 package com.taotao.utils;
 
-import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.*;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +8,9 @@ import java.util.Set;
 public class JedisGetUtils {
     static{
         //单机版
-        jedisPool = new JedisPool("47.101.212.18",7000);
+        JedisPoolConfig config = new JedisPoolConfig();
+        config.setMaxWaitMillis(100000);
+        jedisPool = new JedisPool(config,"47.101.212.18",7000);
         //集群版
         Set<HostAndPort> set = new HashSet<>();
         set.add(new HostAndPort("47.101.212.18",7001));

@@ -18,7 +18,7 @@ public class ItemController {
 	private ItemService itemService;
 	@RequestMapping("/{itemId}")
 	@ResponseBody
-	public TbItem getItemById(Integer itemId){
+	public TbItem getItemById(Long itemId){
 		return itemService.findItemById(itemId);
 	}
 
