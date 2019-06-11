@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.taotao.mapper.TbItemParamMapper" >
+    <select id="findItemParamByCid" parameterType="long" resultType="com.taotao.pojo.TbItemParam">
+        SELECT * FROM tbitemparam WHERE itemCatId=#{itemCatId}
+    </select>
+
+    <insert id="insertItemParam" parameterType="com.taotao.pojo.TbItemParam">
+        INSERT INTO tbitemparam(itemCatId, paramData, created, updated) VALUES(#{itemCatId},#{paramData},#{created},#{updated})
+    </insert>
 </mapper>

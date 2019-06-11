@@ -2,6 +2,7 @@ package com.taotao.item.controller;
 import com.taotao.item.pojo.Item;
 import com.taotao.pojo.TbItem;
 import com.taotao.pojo.TbItemDesc;
+import com.taotao.pojo.TbItemParamItem;
 import com.taotao.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,5 +30,12 @@ public class ItemController {
     public String showItemDesc(@PathVariable Long itemId){
         TbItemDesc itemDesc = itemService.findItemDescByItemId(itemId);
         return itemDesc.getItemDesc();
+    }
+
+    @RequestMapping("/param/{itemId}")
+    @ResponseBody
+    public String showItemParam(@PathVariable Long itemId){
+        String itemParam = itemService.findItemParamByItemId(itemId);
+       return itemParam;
     }
 }

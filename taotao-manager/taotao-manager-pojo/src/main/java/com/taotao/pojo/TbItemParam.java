@@ -6,13 +6,24 @@ import java.util.Date;
 public class TbItemParam implements Serializable{
     private Long id;
 
-    private Long itemcatId;
+    private Long itemCatId;
 
     private Date created;
 
     private Date updated;
 
     private String paramData;
+
+	@Override
+	public String toString() {
+		return "TbItemParam{" +
+				"id=" + id +
+				", itemCatId=" + itemCatId +
+				", created=" + created +
+				", updated=" + updated +
+				", paramData='" + paramData + '\'' +
+				'}';
+	}
 
 	public Long getId() {
 		return id;
@@ -22,12 +33,12 @@ public class TbItemParam implements Serializable{
 		this.id = id;
 	}
 
-	public Long getItemcatId() {
-		return itemcatId;
+	public Long getItemCatId() {
+		return itemCatId;
 	}
 
-	public void setItemcatId(Long itemcatId) {
-		this.itemcatId = itemcatId;
+	public void setItemCatId(Long itemCatId) {
+		this.itemCatId = itemCatId;
 	}
 
 	public Date getCreated() {
@@ -53,12 +64,4 @@ public class TbItemParam implements Serializable{
 	public void setParamData(String paramData) {
 		this.paramData = paramData;
 	}
-
-	@Override
-	public String toString() {
-		return "TbItemParam [id=" + id + ", itemcatId=" + itemcatId + ", created=" + created + ", updated=" + updated
-				+ ", paramData=" + paramData + "]";
-	}
-
-   
 }

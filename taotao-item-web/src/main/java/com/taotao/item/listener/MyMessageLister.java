@@ -3,6 +3,7 @@ package com.taotao.item.listener;
 import com.taotao.item.pojo.Item;
 import com.taotao.pojo.TbItem;
 import com.taotao.pojo.TbItemDesc;
+import com.taotao.pojo.TbItemParamItem;
 import com.taotao.service.ItemService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -41,10 +42,11 @@ public class MyMessageLister implements MessageListener {
                 TbItem tbItem = itemService.findItemById(Long.valueOf(itemId));
                 Item item = new Item(tbItem);
                 TbItemDesc itemDesc = itemService.findItemDescByItemId(Long.valueOf(itemId));
-
+                String itemParam = itemService.findItemParamByItemId(Long.valueOf(itemId));
                 Map map = new HashMap();
                 map.put("item",item);
                 map.put("itemDesc",itemDesc);
+                map.put("itemParam",itemParam);
                 Configuration configuration = freeMarkerConfig.getConfiguration();
                 Template template = configuration.getTemplate("item.ftl");
                 writer = new BufferedWriter(new FileWriter("E:\\static\\"+itemId+".html"));

@@ -40,6 +40,8 @@
 	<dubbo:reference interface="com.taotao.service.ItemService" id="itemService" timeout="60000"/>
 	<dubbo:reference interface="com.taotao.service.ItemCatService" id="itemCatService" timeout="60000"/>
 	<dubbo:reference interface="com.taotao.service.PictureService" id="pictureService" timeout="60000"/>
+	<dubbo:reference interface="com.taotao.service.ItemParamService" id="itemParamService" timeout="60000"/>
+
 	<dubbo:reference interface="com.taotao.content.service.ContentCategoryService" id="contentCategoryService" timeout="60000"/>
 	<dubbo:reference interface="com.taotao.content.service.ContentService" id="contentService" timeout="60000"/>
 	<!--查询接口-->

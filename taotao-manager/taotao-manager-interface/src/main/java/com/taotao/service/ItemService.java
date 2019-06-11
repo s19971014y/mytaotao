@@ -2,6 +2,7 @@ package com.taotao.service;
 
 import com.taotao.pojo.TbItem;
 import com.taotao.pojo.TbItemDesc;
+import com.taotao.pojo.TbItemParamItem;
 import com.taotao.result.EasyUIResult;
 import com.taotao.result.TaotaoResult;
 
@@ -26,9 +27,10 @@ public interface ItemService {
 	 * 添加一个商品对象到数据库中，里面包含了商品基本信息对象和商品描述对象
 	 * @param tbItem 商品基本信息对象
 	 * @param desc   描述，在实现类中用商品描述对象的itemDesc属性装
+	 * @param itemParams 规格参数对象
 	 * @return TaotaoResult对象，里面有四个属性   MAPPER(jackson对象),status状态码，msg描述信息，data数据
 	 */
-	TaotaoResult addItem(TbItem tbItem,String desc) throws Exception;
+	TaotaoResult addItem(TbItem tbItem,String desc,String itemParams) throws Exception;
 
 	/**
 	 * 根据商品id 查询商品描述信息
@@ -36,4 +38,6 @@ public interface ItemService {
 	 * @return
 	 */
 	TbItemDesc findItemDescByItemId(Long itemId);
+
+	String findItemParamByItemId(Long itemId);
 }
