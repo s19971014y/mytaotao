@@ -113,6 +113,7 @@
             <span class="clr"></span>
         </form>
     </div>
+</div>
 <script type="text/javascript">
 	var REGISTER={
 		param:{

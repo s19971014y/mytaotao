@@ -3,12 +3,16 @@ package com.taotao.portal.controller;
 import com.taotao.content.service.ContentService;
 import com.taotao.pojo.TbContent;
 import com.taotao.protal.pojo.Ad1Node;
+import com.taotao.result.ItemCatResult;
+import com.taotao.service.ItemCatService;
 import com.taotao.utils.JsonUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +22,9 @@ public class IndexController {
 
     @Autowired
     private ContentService contentService;
+
+    @Autowired
+    private ItemCatService itemCatService;
 
     @Value("${AD1_CID}")
     private Long AD1_CID;
@@ -54,5 +61,17 @@ public class IndexController {
         model.addAttribute("ad1", JsonUtils.objectToJson(nodes));
 
         return "index";
+    }
+
+    //http://localhost:8082/item/cat/itemcat/all.html
+    @RequestMapping("/item/cat/itemcat/all")
+    @ResponseBody
+    public String queryAll(String callback){
+        ItemCatResult result = itemCatService.findItemCatAll(Long.valueOf(0));
+        if(StringUtils.isNotBlank(callback)){
+            String jsonp = callback +"(" +JsonUtils.objectToJson(result) +")";
+            return jsonp;
+        }
+        return JsonUtils.objectToJson(result);
     }
 }

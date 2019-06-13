@@ -32,6 +32,10 @@ public class JedisUtils{
     }
     public  static Long hdel(String key, String... field){
         return jedis.hdel(key, field);
+
     }
+    public static Long del(String key){
+        return jedis.del(key);
+    };
 
 }

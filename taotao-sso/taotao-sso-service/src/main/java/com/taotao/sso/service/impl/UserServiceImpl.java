@@ -107,6 +107,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TaotaoResult loginUser(String userName, String passWord) {
+
         //校验账号是否为空
         if(StringUtils.isBlank(userName)){
             return  TaotaoResult.build(400,"用户名不能为空");
@@ -128,5 +129,28 @@ public class UserServiceImpl implements UserService {
 
 
         return TaotaoResult.ok(token);
+    }
+
+    @Override
+    public TaotaoResult getUserByToken(String token) {
+        String json = JedisUtils.get(USER_INFO+":"+token);
+        if(StringUtils.isBlank(json)){
+            return TaotaoResult.build(400,"用户没有登录",false);
+        }
+        //延长登录时间
+        JedisUtils.expire(USER_INFO+":"+token,SESSION_EXPIRE);
+        //是一个字符串类型的json格式
+        TbUser tbUser = JsonUtils.jsonToPojo(json, TbUser.class);
+
+        return TaotaoResult.ok(tbUser);
+    }
+
+    @Override
+    public TaotaoResult loginoutUser(String token) {
+        Long num = JedisUtils.del(USER_INFO+":"+token);
+        if(num == 0){
+            return TaotaoResult.build(400,"没有找到该用户",false);
+        }
+        return TaotaoResult.ok();
     }
 }

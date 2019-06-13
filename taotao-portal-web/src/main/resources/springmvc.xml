@@ -26,6 +26,56 @@
 		<property name="maxUploadSize" value="5242880"></property>
 	</bean>
 
+	<!--注解驱动ResponseBody  中文乱码解决-->
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8"></constructor-arg>
+				<property name="supportedMediaTypes">
+					<list>
+						<bean class="org.springframework.http.MediaType">
+							<constructor-arg index="0" value="text"></constructor-arg>
+							<constructor-arg index="1" value="plain"></constructor-arg>
+							<constructor-arg index="2" value="UTF-8"></constructor-arg>
+						</bean>
+						<bean class="org.springframework.http.MediaType">
+							<constructor-arg index="0" value="*"></constructor-arg>
+							<constructor-arg index="1" value="*"></constructor-arg>
+							<constructor-arg index="2" value="UTF-8"></constructor-arg>
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+
+	<mvc:annotation-driven>
+		         <mvc:message-converters>
+		             <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		                 <property name="supportedMediaTypes">
+		                     <list>
+		                         <value>text/plain;charset=utf-8</value>
+		                         <value>text/html;charset=UTF-8</value>
+		                         <value>text/json;charset=UTF-8</value>
+		                         <value>application/json;charset=utf-8</value>
+		                     </list>
+		                 </property>
+		                 <property name="objectMapper">
+		                    <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+		                         <property name="dateFormat">
+		                             <bean class="java.text.SimpleDateFormat">
+		                                 <constructor-arg type="java.lang.String" value="yyyy-MM-dd HH:mm:ss"/>
+		                             </bean>
+		                         </property>
+		                     </bean>
+		                 </property>
+		             </bean>
+		         </mvc:message-converters>
+	</mvc:annotation-driven>
+
+
+
 
 	<!-- 引用dubbo服务 -->
 	<dubbo:application name="taotao-portal-web"/>
@@ -34,4 +84,5 @@
 	<dubbo:registry protocol="zookeeper" address="47.101.212.18:2181"/>
 <!--内容分类服务层-->
 	<dubbo:reference interface="com.taotao.content.service.ContentService" id="contentService" />
+	<dubbo:reference interface="com.taotao.service.ItemCatService" id="itemCatService" />
 </beans>

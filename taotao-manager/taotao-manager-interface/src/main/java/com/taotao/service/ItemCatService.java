@@ -1,6 +1,7 @@
 package com.taotao.service;
 
 import com.taotao.result.EasyUITreeNode;
+import com.taotao.result.ItemCatResult;
 
 import java.util.List;
 
@@ -11,4 +12,6 @@ public interface ItemCatService {
      * @return 返回集合 有三个属性 id name state
      */
     List<EasyUITreeNode> getCatList(Long parentId);
+
+    ItemCatResult findItemCatAll(Long parentId);
 }

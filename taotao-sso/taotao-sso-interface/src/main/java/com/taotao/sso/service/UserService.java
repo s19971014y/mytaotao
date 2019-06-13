@@ -27,4 +27,19 @@ public interface UserService {
      * @return
      */
     TaotaoResult loginUser(String userName,String passWord);
+
+    /**
+     * 根据token从redis中查询用户信息
+     * @param token
+     * @return
+     */
+    TaotaoResult getUserByToken(String token);
+
+
+    /**
+     * 根据token删除redis中指定的数据
+     * @param token 用户token
+     * @return 删除指定的token下的用户信息，或者该token没有存在
+     */
+    TaotaoResult loginoutUser(String token);
 }
