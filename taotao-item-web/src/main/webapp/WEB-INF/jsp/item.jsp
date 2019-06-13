@@ -74,7 +74,7 @@
 		<div class="dd">
 			<div id="store-selector" class="">
 				<div class="text"><div></div><b></b></div>
-				<div class="content">			
+				<div class="content">
 					<span class="clr"></span>
 				</div>
 				<div class="close" onclick="$('#store-selector').removeClass('hover')"></div>
@@ -118,7 +118,7 @@
 		        <span class="heart-white"><span class="heart-red h4">&nbsp;</span></span>
 		        <em class="evaluate-grade"></em>
 	        </p>
-	    </div> 
+	    </div>
 </div><!--brand-bar-->
 			<ul id="choose" clstag="shangpin|keycount|product|choose">
 				<li id='choose-type'></li><script type="text/javascript"> var ColorSize = [{"SkuId":1221882,"Size":"","Color":""}];</script>
@@ -143,18 +143,18 @@
 			</ul><!--choose end-->
 			<span class="clr"></span>
 		</div>
-		
+
 		<div id="preview">
 			<div id="spec-n1" class="jqzoom" clstag="shangpin|keycount|product|spec-n1">
 				<img data-img="1" width="350" height="350" src="${item.images[0]}" alt="${item.title}"  jqimg="${item.images[0]}"/>
 			</div>
-					
+
 			<div id="spec-list" clstag="shangpin|keycount|product|spec-n5">
 				<a href="javascript:;" class="spec-control" id="spec-forward"></a>
 				<a href="javascript:;" class="spec-control" id="spec-backward"></a>
 				<div class="spec-items">
-					<ul class="lh">   
-						<c:forEach items="${item.images}" var="pic" varStatus="status">  
+					<ul class="lh">
+						<c:forEach items="${item.images}" var="pic" varStatus="status">
 							<c:choose>
 								<c:when test="${status.index == 0 }">
 									<li>
@@ -189,7 +189,7 @@
 	</div>
 	<div class="share-ft"><b></b></div>
 </div>
-<div class="clb"></div>				
+<div class="clb"></div>
 			</div>
 		</div><!--preview end-->
 	</div><!--product-intro end-->
@@ -236,7 +236,7 @@
 	<strong>服务承诺：</strong><br />
 	淘淘向您保证所售商品均为正品行货，淘淘自营商品开具机打发票或电子发票。凭质保证书及淘淘发票，可享受全国联保服务（奢侈品、钟表除外；奢侈品、钟表由淘淘联系保修，享受法定三包售后服务），与您亲临商场选购的商品享受相同的质量保证。淘淘还为您提供具有竞争力的商品价格和<a href="http://www.jd.com/help/kdexpress.aspx" target="_blank">运费政策</a>，请您放心购买！
 	<br /><br />
-	注：因厂家会在没有任何提前通知的情况下更改产品包装、产地或者一些附件，本司不能确保客户收到的货物与商城图片、产地、附件说明完全一致。只能确保为原厂正货！并且保证与当时市场上同样主流新品一致。若本商城没有及时更新，请大家谅解！ 
+	注：因厂家会在没有任何提前通知的情况下更改产品包装、产地或者一些附件，本司不能确保客户收到的货物与商城图片、产地、附件说明完全一致。只能确保为原厂正货！并且保证与当时市场上同样主流新品一致。若本商城没有及时更新，请大家谅解！
 </div>
 <div id="state">
 	<strong>权利声明：</strong><br />淘淘上的所有商品信息、客户评价、商品咨询、网友讨论等内容，是淘淘重要的经营资源，未经许可，禁止非法转载使用。
@@ -244,7 +244,7 @@
 </div>
 		</div><!--product-detail end-->
 	</div><!--right end-->
-	
+
 	<div class="left">
 		<div id="miaozhen7886" class="m"><a href="http://c.nfa.jd.com/adclick?sid=2&amp;cid=163&amp;aid=817&amp;bid=7853&amp;unit=69570&amp;advid=156740&amp;guv=&amp;url=http://sale.jd.com/act/IFkpQYSVnG1Jet.html" target="_blank"><img data-img="2" width="211" height="261" src="http://image.taotao.com/images/2014/10/23/2014102305423212301343.jpg" class="loading-style2"></a></div>
 		<div id="miaozhen7886" class="m"><a href="http://c.nfa.jd.com/adclick?sid=2&amp;cid=163&amp;aid=817&amp;bid=7853&amp;unit=69570&amp;advid=156740&amp;guv=&amp;url=http://sale.jd.com/act/IFkpQYSVnG1Jet.html" target="_blank"><img data-img="2" width="211" height="261" src="http://image.taotao.com/images/2014/10/23/2014102305423212301343.jpg" class="loading-style2"></a></div>
@@ -291,7 +291,7 @@
 		var itemId = "${item.id}";
 		//给商品规格参数tab页绑定事件
 		$("#p-con-attr").bind("click", function(){
-			
+
 			itemControl.getItemParam(itemId);
 		});
 		//延迟一秒加载商品描述信息

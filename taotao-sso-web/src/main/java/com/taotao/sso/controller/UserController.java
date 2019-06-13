@@ -3,11 +3,17 @@ package com.taotao.sso.controller;
 import com.taotao.pojo.TbUser;
 import com.taotao.result.TaotaoResult;
 import com.taotao.sso.service.UserService;
+import com.taotao.utils.CookieUtils;
 import com.taotao.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequestMapping("/user")
@@ -15,6 +21,10 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Value("${TT_TOKEN}")
+    private String TT_TOKEN;
+
+
 
     @RequestMapping("/check/{param}/{type}")
     @ResponseBody
@@ -37,21 +47,38 @@ public class UserController {
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     @ResponseBody
-    public TaotaoResult login(String userName, String passWord){
+    public TaotaoResult login(String userName, String passWord, HttpServletRequest request, HttpServletResponse response){
         TaotaoResult result = userService.loginUser(userName, passWord);
+        //要把用户信息存入到cookie
+        //账号密码验证成功了才存入cookie
+        if(result.getStatus() == 200) {
+            CookieUtils.setCookie(request,response,TT_TOKEN,JsonUtils.objectToJson(result.getData().toString()));
+        }
         return result;
     }
 
-    @RequestMapping(value = "/token/{token}",method = RequestMethod.GET)
+    @RequestMapping(value = "/token/{token}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE+";charset=utf-8")
     @ResponseBody
-    public TaotaoResult getUserByToken(@PathVariable String token){
+    //校验用户是否登录的方法
+    public String getUserByToken(@PathVariable String token,String callback){
         TaotaoResult result = userService.getUserByToken(token);
-        return result;
+        String res;
+        if(result.getStatus() == 400){
+            res = JsonUtils.objectToJson(result);
+            return res;
+        }
+        if(StringUtils.isNotBlank(callback)){
+            res = callback + "("+JsonUtils.objectToJson(result)+");";
+            return res;
+        }
+        return JsonUtils.objectToJson(result);
     }
 
     @RequestMapping("/logout/{token}")
     @ResponseBody
+
     public TaotaoResult logoutUser(@PathVariable String token){
+
         TaotaoResult result = userService.loginoutUser(token);
         return result;
     }

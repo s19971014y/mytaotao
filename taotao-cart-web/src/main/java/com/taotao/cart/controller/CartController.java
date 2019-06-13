@@ -1,6 +1,7 @@
 package com.taotao.cart.controller;
 
 import com.taotao.pojo.TbItem;
+import com.taotao.result.TaotaoResult;
 import com.taotao.service.ItemService;
 import com.taotao.utils.CookieUtils;
 import com.taotao.utils.JsonUtils;
@@ -8,8 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -74,5 +77,44 @@ public class CartController {
             return result;
         }
         return new ArrayList<>();
+    }
+
+    @RequestMapping("/cart")
+    public String showCartList(HttpServletRequest request, Model model){
+        //能够到这里  表示一定有商品信息
+        List<TbItem> cartList = getCartList(request);
+        model.addAttribute("cartList",cartList);
+        return "cart";
+    }
+
+    @RequestMapping("/update/num/{itemId}/{num}")
+    @ResponseBody
+    public TaotaoResult updateNum(@PathVariable Long itemId,@PathVariable Integer num,HttpServletRequest request,HttpServletResponse response){
+        //能够点击+ 或者 - 表示一定有商品在cookie中
+        List<TbItem> cartList = getCartList(request);
+        for(TbItem item:cartList){
+            if(item.getId() == itemId.longValue()){
+                item.setNum(num);
+                break;
+            }
+        }
+        //再次把商品改变的数据加入到cookie里面去
+        CookieUtils.setCookie(request,response,TT_CART,JsonUtils.objectToJson(cartList),CART_EXPIRE,true);
+        return  TaotaoResult.ok();
+    }
+
+    @RequestMapping("/delete/{itemId}")
+    public String deleteCartItem(@PathVariable Long itemId,HttpServletRequest request,HttpServletResponse response){
+        List<TbItem> cartList = getCartList(request);
+        System.out.println(JsonUtils.objectToJson(cartList));
+        for(int i=0;i < cartList.size();i++){
+            if(cartList.get(i).getId() == itemId.longValue()){
+                //增强for循环底层是迭代器，不能进行增删操作，否则报错
+                cartList.remove(i);
+            }
+        }
+        System.out.println(JsonUtils.objectToJson(cartList));
+        CookieUtils.setCookie(request,response,TT_CART,JsonUtils.objectToJson(cartList),CART_EXPIRE,true);
+        return "redirect:/cart/cart.html";
     }
 }

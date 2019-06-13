@@ -7,35 +7,46 @@ public class JedisUtils{
     private static Jedis jedis = JedisGetUtils.getJedis();
 
     public static String set(String key, String value){
-        return jedis.set(key,value);
+        String result = jedis.set(key,value);
+        return result;
     }
     public  static  String get(String key){
-        return jedis.get(key);
+        String result = jedis.get(key);
+        return result;
     }
     public static Boolean exists(String key){
-        return jedis.exists(key);
+        Boolean result = jedis.exists(key);
+        return result;
     }
     public static Long expire(String key, int seconds){
-        return jedis.expire(key,seconds);
+        Long result = jedis.expire(key,seconds);
+        return result;
     }
     public  static Long ttl(String key){
-        return jedis.ttl(key);
+        Long result = jedis.ttl(key);
+        return result;
     }
     public  static  Long incr(String key){
-        return jedis.incr(key);
+        Long result = jedis.incr(key);
+        return result;
     }
     public  static Long hset(String key, String field, String value){
-        return jedis.hset(key, field, value);
+
+        Long result = jedis.hset(key,field,value);
+        return result;
     }
     public  static String hget(String key, String field){
-        return jedis.hget(key, field);
+        String result = jedis.hget(key, field);
+        return result;
     }
     public  static Long hdel(String key, String... field){
-        return jedis.hdel(key, field);
+        Long result = jedis.hdel(key, field);
+        return result;
 
     }
     public static Long del(String key){
-        return jedis.del(key);
+        Long result = jedis.del(key);
+        return result;
     };
 
 }

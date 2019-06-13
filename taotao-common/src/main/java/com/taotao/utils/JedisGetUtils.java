@@ -10,6 +10,7 @@ public class JedisGetUtils {
         //单机版
         JedisPoolConfig config = new JedisPoolConfig();
         config.setMaxWaitMillis(100000);
+        config.setMaxTotal(50);
         jedisPool = new JedisPool(config,"47.101.212.18",7000);
         //集群版
         Set<HostAndPort> set = new HashSet<>();
