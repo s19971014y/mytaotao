@@ -12,11 +12,11 @@ public interface SearchItemMapper {
      * 查询数据库得到所有的商品信息，并且转换为Lucene结构
      * @return
      */
-    @Select("SELECT a.id,a.title,a.sellPoint,a.image,b.name categoryname,c.itemDesc FROM tbitem a LEFT JOIN tbitemcat b ON a.cid = b.id LEFT JOIN tbitemdesc c" +
+    @Select("SELECT a.id,a.title,a.sellPoint,a.price,a.image,b.name categoryname,c.itemDesc FROM tbitem a LEFT JOIN tbitemcat b ON a.cid = b.id LEFT JOIN tbitemdesc c" +
             " ON a.id = c.itemId WHERE a.status=1")
     List<SearchItem>  getItemList();
 
-    @Select("SELECT a.id,a.title,a.sellPoint,a.image,b.name categoryname,c.itemDesc\n" +
+    @Select("SELECT a.id,a.title,a.sellPoint,a.price,a.image,b.name categoryname,c.itemDesc\n" +
             "FROM tbitem a INNER JOIN tbitemcat b ON a.cid = b.id INNER JOIN tbitemdesc c\n" +
             " ON a.id = c.itemId WHERE a.id=#{a.id};")
     SearchItem findItemById(Long id);

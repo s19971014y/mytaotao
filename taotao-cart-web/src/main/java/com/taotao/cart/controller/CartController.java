@@ -1,15 +1,19 @@
 package com.taotao.cart.controller;
 
 import com.taotao.pojo.TbItem;
+import com.taotao.service.ItemService;
 import com.taotao.utils.CookieUtils;
 import com.taotao.utils.JsonUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.HttpCookie;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -19,21 +23,56 @@ public class CartController {
     @Value("${TT_CART}")
     private String TT_CART;
 
+    @Value("${CART_EXPIRE}")
+    private Integer CART_EXPIRE;
+
+    @Autowired
+    private ItemService itemService;
     @RequestMapping("/add/{itemId}")
-    public String addCartItem(@PathVariable Integer itemId, Integer num, HttpCookie cookie,HttpServletRequest request){
+    public String addCartItem(@PathVariable Long itemId, Integer num, HttpServletRequest request, HttpServletResponse response){
 
         //cookie的key定义为：TT_CART value定义为json格式的商品信息
         List<TbItem> cartList = getCartList(request);
         //判断集合对象是否为null
+        boolean flag = false;
+        for (TbItem item:cartList){
+           //判断页面传递过来的itemId是否有包含在这个集合里面，如果有则原来的基础之上加1，没有则直接加1
+            if(item.getId() == itemId){
+                item.setNum(item.getNum()+num);
+                flag = true;
+            }
+        }
 
+        //如果flag为false则表示  新添加到购物车商品  在cookie的购物车里面找不到
+        if(!flag){
+            //使用商品id查询商品信息把商品信息变成json格式，存入cookie中
+            TbItem item = itemService.findItemById(itemId);
+            //设置商品数量
+            item.setNum(1);
+            //设置图片
+            String image = item.getImage();
+            if(StringUtils.isNotBlank(image)){
+                String[] images = image.split(",");
+                item.setImage(images[0]);
+            }
+            //将商品加入到集合中
+            cartList.add(item);
+        }
 
-        return null;
+        //走到这里  cookie一定有商品
+        CookieUtils.setCookie(request,response,TT_CART,JsonUtils.objectToJson(cartList),CART_EXPIRE,true);
+
+        return "cartSuccess";
     }
     //根据cookie的key ，取cookie的value 也就是json格式的商品信息
     private List<TbItem> getCartList(HttpServletRequest request){
 
         //调用cookie的工具类，根据key取value 默认编码为utf-8
         String json = CookieUtils.getCookieValue(request, TT_CART, true);
-        return JsonUtils.jsonToList(json,TbItem.class);
+        if(StringUtils.isNotBlank(json)){
+            List<TbItem> result = JsonUtils.jsonToList(json, TbItem.class);
+            return result;
+        }
+        return new ArrayList<>();
     }
 }
