@@ -57,20 +57,18 @@ public class UserController {
         return result;
     }
 
-    @RequestMapping(value = "/token/{token}",method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE+";charset=utf-8")
+    //jsonp的get请求 去限定了以后 进来不聊这个方法
+    @RequestMapping(value = "/token/{token}", produces = MediaType.APPLICATION_JSON_VALUE + ";charset=utf-8")
     @ResponseBody
-    //校验用户是否登录的方法
-    public String getUserByToken(@PathVariable String token,String callback){
+    //注意 这个方法 是校验用户是否登录的方法，但是呢 www.taoato.com www.search.com www.item.com 这三个不同的域 都会调用校验是否登录的操作 所以这里应该是 跨域了的
+    public String getUserByToken(@PathVariable String token, String callback) {
         TaotaoResult result = userService.getUserByToken(token);
-        String res;
-        if(result.getStatus() == 400){
-            res = JsonUtils.objectToJson(result);
-            return res;
+        //走到这里 就是跨域请求
+        if (StringUtils.isNotBlank(callback)) {
+            String json = callback + "(" + JsonUtils.objectToJson(result) + ");";
+            return json;
         }
-        if(StringUtils.isNotBlank(callback)){
-            res = callback + "("+JsonUtils.objectToJson(result)+");";
-            return res;
-        }
+        //走到这里 就是当工程
         return JsonUtils.objectToJson(result);
     }
 

@@ -47,6 +47,6 @@ public class JedisUtils{
     public static Long del(String key){
         Long result = jedis.del(key);
         return result;
-    };
+    }
 
 }

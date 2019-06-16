@@ -4,6 +4,7 @@ import com.taotao.mapper.TbUserMapper;
 import com.taotao.pojo.TbUser;
 import com.taotao.result.TaotaoResult;
 import com.taotao.sso.service.UserService;
+import com.taotao.utils.JedisGetUtils;
 import com.taotao.utils.JedisUtils;
 import com.taotao.utils.JsonUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -117,13 +118,14 @@ public class UserServiceImpl implements UserService {
             return TaotaoResult.build(400,"密码不能为空");
         }
         //注意密码要md5加密验证
-        TbUser tbUser = tbUserMapper.getUserByUserAndPass(userName,passWord);
+        TbUser tbUser = tbUserMapper.getUserByUserAndPass(userName,DigestUtils.md5DigestAsHex(passWord.getBytes()));
         if(tbUser == null){
             return TaotaoResult.build(400,"账号密码有误请重新输入");
         }
         //生成一个 随机永远不会重复的字符串
         String token = UUID.randomUUID().toString().replace("-","");
         //注意存入缓存中的用户信息不需要密码
+        tbUser.setPassWord(null);
         JedisUtils.set(USER_INFO+":"+token, JsonUtils.objectToJson(tbUser));
         JedisUtils.expire(USER_INFO+":"+token,SESSION_EXPIRE);
 
