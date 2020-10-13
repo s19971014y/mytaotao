@@ -23,7 +23,7 @@
     <!-- 集中定义依赖版本号 -->
     <properties>
         <!-- junit测试 -->
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <!-- spring -->
         <spring.version>4.2.4.RELEASE</spring.version>
         <!-- mybatis -->
